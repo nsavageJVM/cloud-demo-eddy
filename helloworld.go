@@ -15,5 +15,5 @@ func init() {
 
 
 func handle(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "<html><body>Eddys Go Cloud Service </body></html>")
+	fmt.Fprint(w, "<html><body>Eddys Go Cloud Platform Service </body></html>")
 }
