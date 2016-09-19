@@ -40,12 +40,6 @@ type Ticket struct {
 	Date    time.Time
 }
 
-type TempTicket struct {
-	email  string
-	Content string
-	Date    time.Time
-}
-
 
 func init() {
 	http.HandleFunc("/", handleMainPage)
@@ -69,7 +63,7 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 	c := appengine.NewContext(r)
-	q := datastore.NewQuery("Ticket").Ancestor(ticketKey(c)).Order("-Date").Limit(10)
+	q := datastore.NewQuery("Ticket").Ancestor(ticketKey(c))
 
 	var gg []*Ticket
 
