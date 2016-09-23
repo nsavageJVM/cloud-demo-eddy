@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"net/http"
 	"html/template"
 	"appengine"
@@ -13,11 +12,16 @@ import (
 	"bytes"
 )
 
+
+//<editor-fold defaultstate="collapsed"  desc="== datastore ==" >
 func ticketKey(c appengine.Context) *datastore.Key {
 	// The string "default_ticket" here could be varied to have multiple tickets.
 	return datastore.NewKey(c, "Ticket", "default_ticket", 0, nil)
 }
 
+//</editor-fold>
+
+//<editor-fold defaultstate="collapsed"  desc="== main view template ==" >
 var mainPage = template.Must(template.New("guestbook").Parse(
 	`<html><body><h1>Eddys Ticketing System</h1><h2>Tickets</h2>
 
@@ -32,15 +36,17 @@ var mainPage = template.Must(template.New("guestbook").Parse(
 	<div><input type="submit" value="Create Ticket"></div>
 	</form></body></html>
 `))
+//</editor-fold>
 
-
+//<editor-fold defaultstate="collapsed"  desc="== schema ==" >
 type Ticket struct {
 	Author  string
 	Content string
 	Date    time.Time
 }
+//</editor-fold>
 
-
+//<editor-fold defaultstate="collapsed"  desc="== init ==" >
 func init() {
 	http.HandleFunc("/", handleMainPage)
 	http.HandleFunc("/create", handleTicket)
@@ -49,8 +55,9 @@ func init() {
 	http.HandleFunc("/mem", MemeCacheHandler)
 
 }
+//</editor-fold>
 
-
+//<editor-fold defaultstate="collapsed"  desc="== handleMainPage  ==" >
 func handleMainPage(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "GET" {
@@ -78,7 +85,9 @@ func handleMainPage(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+//</editor-fold>
 
+//<editor-fold defaultstate="collapsed"  desc="== datastore ==" >
 func handleTicket(w http.ResponseWriter, r *http.Request) {
 
 	if r.Method != "POST" {
@@ -101,12 +110,15 @@ func handleTicket(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 
 }
+//</editor-fold>
 
-
+//<editor-fold defaultstate="collapsed"  desc="== html form for memcache code==" >
 func IndexHandler(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/index.html", http.StatusFound)
 }
+//</editor-fold>
 
+//<editor-fold defaultstate="collapsed"  desc="== memcache ==" >
 func MemeCacheHandler(w http.ResponseWriter, r *http.Request) {
 
 	ctx := appengine.NewContext(r)
@@ -124,4 +136,4 @@ func MemeCacheHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
-
+//</editor-fold>
